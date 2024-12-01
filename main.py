@@ -17,7 +17,10 @@ class HomePage(QMainWindow):
         self.close()
 
     def go_to_driver_functions(self):
-        pass 
+        from Driver import DriverSignup
+        self.driver_window = DriverSignup()
+        self.driver_window.show()
+        self.close()
 
     def go_to_passenger_functions(self):
         pass  
