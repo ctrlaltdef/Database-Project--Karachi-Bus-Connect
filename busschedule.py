@@ -7,18 +7,14 @@ from utils import database_connection
 class BusSchedulePage(QMainWindow):
     def __init__(self, route_id, parent=None):
         super(BusSchedulePage, self).__init__(parent)
-        self.route_id = route_id  # The route_id passed from the RouteBookingPage
+        self.route_id = route_id  
         loadUi("passenger2.ui", self)  
-        
-        # Set up the table widget to display bus schedule
+
         self.tableWidget.setColumnCount(5)
         self.tableWidget.setHorizontalHeaderLabels(["Bus ID", "Bus Model", "Capacity", "Status", "Driver"])
-
-        # Load bus schedule data based on the selected route
         self.load_bus_schedule()
 
     def load_bus_schedule(self):
-        """Fetch and display bus schedule for the selected route."""
         connection = database_connection()
         cursor = connection.cursor()
         try:
@@ -40,11 +36,9 @@ class BusSchedulePage(QMainWindow):
             cursor.execute(query, (self.route_id,))
             buses = cursor.fetchall()
 
-            # If no buses are found for the given route, show a message
             if not buses:
                 QMessageBox.information(self, "No Bus Available", "No buses are available for the selected route.")
             
-            # Populate the table with bus schedules
             for row_index, row_data in enumerate(buses):
                 self.tableWidget.insertRow(row_index)
                 for col_index, cell_data in enumerate(row_data):
@@ -56,7 +50,7 @@ class BusSchedulePage(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication([])
-    route_id = 17627  # Example route_id, this would come from RouteBookingPage
+    route_id = 17627  
     window = BusSchedulePage(route_id)
     window.show()
     app.exec()

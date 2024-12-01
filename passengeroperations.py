@@ -82,9 +82,4 @@ class RouteBookingPage(QMainWindow):
         self.close()
 
 
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    Passenger_id = 9001  # Example passenger_id
-    window = RouteBookingPage(Passenger_id=Passenger_id)
-    window.show()
-    sys.exit(app.exec())
+
