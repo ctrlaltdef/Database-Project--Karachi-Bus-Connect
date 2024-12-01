@@ -8,7 +8,6 @@ class HomePage(QMainWindow):
         loadUi("homepage.ui", self)
         self.adminbtn.clicked.connect(self.go_to_admin_signup)
         self.driverbtn.clicked.connect(self.go_to_driver_functions) 
-        self.passgrbtn.clicked.connect(self.go_to_passenger_functions)
         self.passgrbtn.clicked.connect(self.go_to_passenger_signup)
 
     def go_to_admin_signup(self):
