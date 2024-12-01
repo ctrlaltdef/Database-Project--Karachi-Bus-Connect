@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>919</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>40</y>
+      <width>851</width>
+      <height>231</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Bus Schedule</string>
+    </property>
+    <widget class="QComboBox" name="comboBox">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>30</y>
+       <width>181</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>17627</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>55</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Route ID</string>
+     </property>
+    </widget>
+    <widget class="QTableWidget" name="tableWidget">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>70</y>
+       <width>761</width>
+       <height>141</height>
+      </rect>
+     </property>
+     <row>
+      <property name="text">
+       <string>1</string>
+      </property>
+     </row>
+     <column>
+      <property name="text">
+       <string>Bus ID</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Bus Model</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Capacity</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Status</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Driver Name</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Driver Contact</string>
+      </property>
+     </column>
+     <item row="0" column="0">
+      <property name="text">
+       <string>4126</string>
+      </property>
+     </item>
+     <item row="0" column="1">
+      <property name="text">
+       <string>Daewoo Bus</string>
+      </property>
+     </item>
+     <item row="0" column="2">
+      <property name="text">
+       <string>27</string>
+      </property>
+     </item>
+     <item row="0" column="3">
+      <property name="text">
+       <string>Active</string>
+      </property>
+     </item>
+     <item row="0" column="4">
+      <property name="text">
+       <string>Akmal Sohail</string>
+      </property>
+     </item>
+     <item row="0" column="5">
+      <property name="text">
+       <string>555-9101</string>
+      </property>
+     </item>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>300</y>
+      <width>741</width>
+      <height>231</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Bus Stops</string>
+    </property>
+    <widget class="QComboBox" name="comboBox_2">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>30</y>
+       <width>201</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>17627</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>55</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Route ID</string>
+     </property>
+    </widget>
+    <widget class="QTableWidget" name="tableWidget_2">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>60</y>
+       <width>591</width>
+       <height>141</height>
+      </rect>
+     </property>
+     <row>
+      <property name="text">
+       <string>1.</string>
+      </property>
+     </row>
+     <column>
+      <property name="text">
+       <string>Stop ID</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Stop Name</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Location</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Estimated Time</string>
+      </property>
+     </column>
+     <item row="0" column="0">
+      <property name="text">
+       <string>60123</string>
+      </property>
+     </item>
+     <item row="0" column="1">
+      <property name="text">
+       <string>Model Colony Gate</string>
+      </property>
+     </item>
+     <item row="0" column="2">
+      <property name="text">
+       <string>LOC</string>
+      </property>
+     </item>
+     <item row="0" column="3">
+      <property name="text">
+       <string>06:15</string>
+      </property>
+     </item>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>919</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
