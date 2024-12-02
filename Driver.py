@@ -95,6 +95,7 @@ class DriverDashboard(QMainWindow):
         # Clear the combobox and add bus IDs
         self.Buses_assigned.clear()
         self.Buses_assigned.addItems(bus_ids)
+        self.display_routes()
         
     def display_routes(self):
         try:
