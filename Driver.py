@@ -1,28 +1,13 @@
-import pyodbc
+from utils import database_connection
 import sys
-from PyQt6.QtWidgets import QMainWindow, QApplication, QMessageBox, QWidget
+import pyodbc
+from PyQt6.QtWidgets import QMainWindow, QApplication, QMessageBox, QWidget, QTableWidgetItem
 from PyQt6.uic import loadUi
 
-server = 'localhost'
-database = 'KBusConnect'  # Name of your Northwind database
-use_windows_authentication = False  # Set to True to use Windows Authentication
-username = 'sa'  # Specify a username if not using Windows Authentication
-password = 'Fall2022.dbms'  # Specify a password if not using Windows Authentication
-
-
-# Create the connection string based on the authentication method chosen
-if use_windows_authentication:
-    connection_string = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;'
-else:
-    connection_string = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password}'
-
-# Establish a connection to the database
-connection = pyodbc.connect(connection_string)
-
-# Create a cursor to interact with the database
+connection = database_connection()
 cursor = connection.cursor()
 
-# add check of whether the user already exists...
+
 class DriverSignup(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -37,7 +22,6 @@ class DriverSignup(QMainWindow):
         self.close()
 
     def driver_registration(self):
-        # Retrieve input values from the UI
         name = self.Name.text()
         cnic = self.CNIC.text()
         phone_number = self.PhoneNum.text()
@@ -95,7 +79,8 @@ class DriverDashboard(QMainWindow):
         self.set_driver_id()
         self.display_bus_ids()
         self.Buses_assigned.currentTextChanged.connect(self.display_routes)
-
+        self.Routes_assigned.currentTextChanged.connect(self.display_stops)
+        self.Reached_button.clicked.connect(self.mark_stop_as_reached)
 
     def set_driver_id(self):
         self. Driver_ID_display.setText(f"Driver ID: {self.driver_id}")
@@ -113,21 +98,129 @@ class DriverDashboard(QMainWindow):
         
     def display_routes(self):
         try:
-            selected_bus_id = self.bus_combobox.currentText()
+            selected_bus_id = self.Buses_assigned.currentText()
 
             if selected_bus_id:
                 # Fetch routes for the selected bus ID
-                query = "SELECT Route_name FROM Route WHERE Bus_id = ?"
+                query = """
+                SELECT R.starting_point, R.Destination
+                FROM bus_route BR
+                INNER JOIN Route R on R.route_id = BR.route_id
+                WHERE Bus_id = ?
+                """
                 cursor.execute(query, (selected_bus_id,))
-                routes = [f"{row[1]} - {row[2]}" for row in cursor.fetchall()] 
+                # results = cursor.fetchall()
+                results = [f"{row[0]} - {row[1]}" for row in cursor.fetchall()] 
 
                 # Clear and populate the routes dropdown or list
-                self.routes_combobox.clear()
-                self.routes_combobox.addItems(routes)
+                self.Routes_assigned.clear()
+                self.Routes_assigned.addItems(results)
+
+                self.display_stops() 
 
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Failed to fetch routes: {e}")
 
+    def display_stops(self):
+        try:
+            selected_route = self.Routes_assigned.currentText()
 
+            if selected_route:
+                # Extract the starting point and destination from the selected route
+                starting_point, destination = selected_route.split(" - ")
 
+                # Fetch the Route_id based on the selected starting point and destination
+                query = """
+                SELECT route_id 
+                FROM Route
+                WHERE starting_point = ? AND destination = ?
+                """
+                cursor.execute(query, (starting_point, destination))
+                route_id_result = cursor.fetchone()
 
+                if route_id_result:
+                    route_id = route_id_result[0]
+
+                    # Fetch stops for the selected route
+                    query = """
+                    SELECT S.stop_name, CONVERT(VARCHAR(8), S.estimated_reaching_time, 108) AS reaching_time
+                    FROM Route_Stop RS
+                    INNER JOIN Stop S ON RS.stop_id = S.stop_id
+                    WHERE RS.route_id = ?
+                    """
+                    cursor.execute(query, (route_id,))
+                    stops = cursor.fetchall()  # Fetch all stops for the route
+
+                    # Clear the table before adding new rows
+                    self.Stops_table.setRowCount(0)
+
+                    # Set up the table headers
+                    self.Stops_table.setColumnCount(2)
+                    self.Stops_table.setHorizontalHeaderLabels(["Stop Name", "Estimated Reaching Time"])
+
+                    # Populate the table with the stops
+                    for row_number, (stop_name, reaching_time) in enumerate(stops):
+                        self.Stops_table.insertRow(row_number)
+                        self.Stops_table.setItem(row_number, 0, QTableWidgetItem(stop_name))
+                        self.Stops_table.setItem(row_number, 1, QTableWidgetItem(str(reaching_time)))
+
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Failed to fetch stops: {e}")
+
+    def mark_stop_as_reached(self):
+        try:
+            # Ensure a stop row is selected
+            selected_row = self.Stops_table.currentRow()
+            if selected_row == -1:
+                QMessageBox.warning(self, "Warning", "Please select a stop from the table!")
+                return
+
+            # Get stop_name and bus_id
+            stop_name_item = self.Stops_table.item(selected_row, 0)  
+            if not stop_name_item:
+                QMessageBox.warning(self, "Warning", "No stop selected!")
+                return
+
+            stop_name = stop_name_item.text()
+            estimated_time = self.Stops_table.item(selected_row, 1).text()  
+
+            # Get selected bus
+            selected_bus = self.Buses_assigned.currentText()
+            if not selected_bus:
+                QMessageBox.warning(self, "Warning", "No bus is selected!")
+                return
+
+            
+            bus_id = int(selected_bus)  
+
+            # Fetch stop_id based on the stop_name
+            cursor.execute("SELECT Stop_id FROM Stop WHERE Stop_name = ?", (stop_name,))
+            stop_id_result = cursor.fetchone()
+
+            if not stop_id_result:
+                QMessageBox.critical(self, "Error", "Stop not found!")
+                return
+
+            stop_id = stop_id_result[0]
+
+            # Update the d_status 
+            update_query = """
+            UPDATE Bus_stop
+            SET d_status = 'Reached'
+            WHERE bus_id = ? AND stop_id = ?
+            """
+            cursor.execute(update_query, (bus_id, stop_id))
+            connection.commit()
+
+            # Apply strikethrough 
+            for column in range(self.Stops_table.columnCount()):
+                item = self.Stops_table.item(selected_row, column)
+                if item:
+                    font = item.font()
+                    font.setStrikeOut(True)
+                    item.setFont(font)
+
+            QMessageBox.information(self, "Success", f"Stop '{stop_name}' marked as reached!")
+
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Failed to mark stop as reached: {e}")

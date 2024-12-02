@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>bill129</string>
+     <string/>
     </property>
    </widget>
    <widget class="QPushButton" name="alreadyaccbtn">
@@ -76,7 +76,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>0987654321</string>
+     <string/>
     </property>
    </widget>
    <widget class="QPushButton" name="signupBtn">
@@ -102,7 +102,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Ahmed Bilal</string>
+     <string/>
     </property>
    </widget>
    <widget class="QCheckBox" name="agree_checkbox">
@@ -128,7 +128,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>12345-6789012-3</string>
+     <string/>
     </property>
    </widget>
    <widget class="QLabel" name="label">
@@ -154,7 +154,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>bill129</string>
+     <string/>
     </property>
    </widget>
    <widget class="QLabel" name="label_6">

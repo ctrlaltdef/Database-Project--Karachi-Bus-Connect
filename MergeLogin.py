@@ -1,27 +1,11 @@
-import pyodbc
+from utils import database_connection
 import sys
+import pyodbc
 from PyQt6.QtWidgets import QMainWindow, QApplication, QMessageBox, QWidget, QComboBox
 from PyQt6.uic import loadUi
 
-
-server = 'localhost'
-database = 'KBusConnect'  # Name of your Northwind database
-use_windows_authentication = False  # Set to True to use Windows Authentication
-username = 'sa'  # Specify a username if not using Windows Authentication
-password = 'Fall2022.dbms'  # Specify a password if not using Windows Authentication
-
-
-# Create the connection string based on the authentication method chosen
-if use_windows_authentication:
-    connection_string = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};Trusted_Connection=yes;'
-else:
-    connection_string = f'DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password}'
-
-# Establish a connection to the database
-# connection = pyodbc.connect(connection_string)
-
-# # Create a cursor to interact with the database
-# cursor = connection.cursor()
+connection = database_connection()
+cursor = connection.cursor()
 
 
 
@@ -49,9 +33,6 @@ class CommonLogin(QMainWindow):
                 QMessageBox.warning(self, "Warning", "Please fill in both ID and Password!")
                 return
 
-            connection = pyodbc.connect(connection_string)
-
-            cursor = connection.cursor()
             try:
                 if role == "Admin":
                     query = "SELECT Operator_id FROM Transport_operator WHERE Operator_id = ? AND password = ?"
@@ -92,5 +73,5 @@ class CommonLogin(QMainWindow):
 
             except Exception as e:
                 QMessageBox.critical(self, "Error", f"Failed to login: {e}")
-            finally:
-                connection.close()
+            # finally:
+            #     connection.close()

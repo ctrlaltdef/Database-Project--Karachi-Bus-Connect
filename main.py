@@ -23,7 +23,7 @@ class HomePage(QMainWindow):
         self.close()
 
     def go_to_passenger_signup(self):
-        from passengersignup import PassengerSignup  # Assuming you have a PassengerSignup class in passengersignup.py
+        from passengersignup import PassengerSignup  
         self.signup_window = PassengerSignup()
         self.signup_window.show()
         self.close()
@@ -36,7 +36,6 @@ class HomePage(QMainWindow):
         self.route_management_page.tableWidget.cellDoubleClicked.connect(self.open_bus_schedule)
         
     def open_bus_schedule(self, row, column):
-        # Get the selected route ID from the table
         route_id = self.route_management_page.table.item(row, 0).text()
         from busschedule import BusSchedulePage 
         self.bus_schedule_page = BusSchedulePage(route_id)
