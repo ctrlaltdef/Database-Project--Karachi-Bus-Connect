@@ -50,7 +50,7 @@ class BusSchedulePage(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication([])
-    route_id = 17627  
+    route_id = 12345  
     window = BusSchedulePage(route_id)
     window.show()
     app.exec()
