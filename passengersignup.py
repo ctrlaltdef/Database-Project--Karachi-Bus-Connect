@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QMainWindow, QApplication, QMessageBox
 from PyQt6.uic import loadUi
 import sys
 from utils import database_connection
-from passengeroperations import RouteBookingPage  # Assuming this handles passenger1.ui
+from passengeroperations import RouteBookingPage 
 
 class PassengerSignup(QMainWindow):
     def __init__(self):
@@ -20,7 +20,7 @@ class PassengerSignup(QMainWindow):
         phone = self.lineEdit_5.text()
         agreed_to_terms = self.checkBox_3.isChecked()
 
-        if not self.iagreecheckbox.isChecked():
+        if not self.checkBox_3.isChecked():
             QMessageBox.warning(self, "Warning", "You must agree to the terms and conditions to register.")
             return
         if not name or not email or not phone or not password or not confirmpass:
